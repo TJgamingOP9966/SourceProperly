@@ -20,7 +20,7 @@ module.exports = {
             .setTimestamp()
 
         let channel = message.guild.channels.find(c => c.name == "logs");
-        if (!channel) return message.reply("Couldn't find reports channel").then(m => m.delete(5000));
+        if (!channel) return message.reply("Couldn't find \"logs\" channel").then(m => m.delete(5000));
         
         channel.send(embed);
         member.kick(reason);
