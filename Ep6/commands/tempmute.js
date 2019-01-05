@@ -16,7 +16,8 @@ module.exports = {
             try {
                 message.guild.createRole({
                     name: "muted",
-                    color: "BLACK"
+                    color: "BLACK",
+                    permissions: []
                 }).then(r => {
                     message.guild.channels.forEach(chan => {
                         chan.overwritePermissions(r, {
