@@ -13,7 +13,7 @@ bot.on("ready", () => {
 });
 
 bot.on("message", async message => {
-    if (message.author.bot || message.channel.type == "dm") return;
+    if (message.author.bot || message.channel.type != "text") return;
 
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let cmd = args.shift().toLowerCase();
