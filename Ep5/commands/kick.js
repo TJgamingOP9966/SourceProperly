@@ -8,6 +8,7 @@ module.exports = {
         let member = message.mentions.members.first();
         if (!member) return message.reply("You didn't mention someone.").then(m => m.delete(5000));
         if (!message.member.hasPermission("KICK_MEMBERS") || !member.kickable) return message.reply("Sorry, you don't have permissions").then(m => m.delete(5000));
+        if (member == message.member) return message.reply("You can't kick yourself.").then(m => m.delete(5000));
 
         let reason = args.slice(1).join(" ") || "None";
 

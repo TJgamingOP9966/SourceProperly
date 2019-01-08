@@ -21,6 +21,7 @@ bot.on("message", async message => {
     if (cmd == `${prefix}report`) {
         let member = message.mentions.members.first();
         if (!member) return message.reply("You didn't mention someone.").then(m => m.delete(5000));
+        if (member == message.member) return message.reply("You can't report yourself.").then(m => m.delete(5000));
 
         let reason = args.slice(1).join(" ") || "None";
 

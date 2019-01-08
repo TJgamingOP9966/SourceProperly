@@ -7,7 +7,8 @@ module.exports = {
     run: async (bot, message, args) => {
         let member = message.mentions.members.first();
         if (!member) return message.reply("You didn't mention someone.").then(m => m.delete(5000));
-        if (!message.member.hasPermission("BAN_MEMBERS") || !member.kickable) return message.reply("Sorry, you don't have permissions").then(m => m.delete(5000));
+        if (!message.member.hasPermission("BAN_MEMBERS") || !member.bannable) return message.reply("Sorry, you don't have permissions").then(m => m.delete(5000));
+        if (member == message.member) return message.reply("You can't ban yourself.").then(m => m.delete(5000));
 
         let reason = args.slice(1).join(" ") || "None";
 
