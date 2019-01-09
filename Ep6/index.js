@@ -1,9 +1,29 @@
 const { prefix, token } = require("./config.json");
-const { Client, RichEmbed } = require("discord.js");
+const { Client, RichEmbed, Collection } = require("discord.js");
 
 const bot = new Client({
     disableEveryone: true
 });
+
+bot.commands = new Collection();
+
+let load = (dir) => {
+    fs.readdir(dir, (err, files) => {
+        let jsfile = files.filter(f => f.split(".")[1] === "js");
+
+        jsfile.forEach((f, i) => {
+            delete require.cache[require.resolve(`${dir}${f}`)];
+
+            let props = require(`${dir}${f}`);
+            console.log(`${f} loaded!`);
+            
+            bot.commands.set(props.help.name, props);
+            if (props.help.aliases) props.help.aliases.forEach(alias => bot.aliases.set(alias, props.help.name));
+        });
+    });
+}
+
+load("./commands/");
 
 bot.on("ready", () => {
     console.log(`${bot.user.username} is now online!`);
