@@ -8,7 +8,7 @@ module.exports = {
     run: async (bot, message, args) => {
         let member = message.mentions.members.first() || message.guild.members.get(args[0]);
         if (!member) return message.reply("Couldn't find that member.").then(m => m.delete(5000));
-        if (tomute.hasPermission("MANAGE_MESSAGES")) return message.reply("Couldn't mute that person.").then(m => m.delete(5000));
+        if (member.hasPermission("MANAGE_MESSAGES")) return message.reply("Couldn't mute that person.").then(m => m.delete(5000));
 
         let role = message.guild.roles.find(r => r.name == "muted");
 
