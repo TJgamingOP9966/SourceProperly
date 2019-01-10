@@ -1,5 +1,6 @@
 const { prefix, token } = require("./config.json");
 const { Client, RichEmbed, Collection } = require("discord.js");
+const { readdir } = require("fs");
 
 const bot = new Client({
     disableEveryone: true
@@ -8,7 +9,7 @@ const bot = new Client({
 bot.commands = new Collection();
 
 let load = (dir) => {
-    fs.readdir(dir, (err, files) => {
+    readdir(dir, (err, files) => {
         let jsfile = files.filter(f => f.split(".")[1] === "js");
 
         jsfile.forEach((f, i) => {
