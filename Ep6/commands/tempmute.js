@@ -37,7 +37,7 @@ module.exports = {
 
         setTimeout(() => {
             member.removeRole(role);
-        }, ms(mutetime));
+        }, ms(time));
 
         let embed = new RichEmbed()
             .setDescription("Mute")
