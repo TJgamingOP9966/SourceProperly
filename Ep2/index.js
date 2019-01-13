@@ -18,7 +18,7 @@ bot.on("message", async message => {
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let cmd = args.shift().toLowerCase();
 
-    if (cmd == `${prefix}serverinfo`) {
+    if (cmd == `serverinfo`) {
         let embed = new RichEmbed()
             .setDescription("Server information")
             .setColor("#15f153")
@@ -31,7 +31,7 @@ bot.on("message", async message => {
         return message.channel.send(embed);
     }
 
-    if (cmd == `${prefix}botinfo`) { 
+    if (cmd == `botinfo`) { 
         let embed = new RichEmbed()
             .setDescription("Bot information")
             .setColor("#15f153")

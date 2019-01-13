@@ -18,7 +18,7 @@ bot.on("message", async message => {
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let cmd = args.shift().toLowerCase();
 
-    if (cmd == `${prefix}report`) {
+    if (cmd == `report`) {
         let member = message.mentions.members.first();
         if (!member) return message.reply("You didn't mention someone.").then(m => m.delete(5000));
         if (member == message.member) return message.reply("You can't report yourself.").then(m => m.delete(5000));
@@ -40,7 +40,7 @@ bot.on("message", async message => {
         message.delete();
     }
 
-    if (cmd == `${prefix}serverinfo`) {
+    if (cmd == `serverinfo`) {
         let embed = new RichEmbed()
             .setDescription("Server information")
             .setColor("#15f153")
@@ -53,7 +53,7 @@ bot.on("message", async message => {
         return message.channel.send(embed);
     }
 
-    if (cmd == `${prefix}botinfo`) { 
+    if (cmd == `botinfo`) { 
         let embed = new RichEmbed()
             .setDescription("Bot information")
             .setColor("#15f153")

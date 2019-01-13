@@ -18,7 +18,7 @@ bot.on("message", async message => {
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let cmd = args.shift().toLowerCase();
 
-    if (cmd == `${prefix}hello`) { 
+    if (cmd == `hello`) { 
         return message.channel.send("Hello!");
     }
 });
