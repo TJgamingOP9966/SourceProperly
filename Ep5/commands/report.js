@@ -14,7 +14,7 @@ module.exports = {
             .setDescription("Report")
             .setColor("#FF0000")
             .addField("Reported user", `${member} with ID: ${member.id}`)
-            .addField("Reported by", `${messag.author} with ID ${message.author.id}`)
+            .addField("Reported by", `${message.author} with ID ${message.author.id}`)
             .addField("Reason", reason)
             .setTimestamp()
 
