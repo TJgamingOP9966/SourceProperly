@@ -2,7 +2,7 @@ const { RichEmbed } = require("discord.js");
 
 module.exports = {
     help: {
-        name: "ban"
+        name: "kick"
     },
     run: async (bot, message, args) => {
         let member = message.mentions.members.first();
