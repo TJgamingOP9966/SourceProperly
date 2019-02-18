@@ -1,5 +1,5 @@
 # Source Properly
-This repo holds an updated, improved version of the tutorials found on theSourceCode YouTube.
+This repo holds an updated, improved version of the tutorials found on TheSourceCode YouTube.
 
 ## Prerequisites
 Make sure you installed
