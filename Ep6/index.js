@@ -8,14 +8,15 @@ const bot = new Client({
 
 bot.commands = new Collection();
 
-let load = dir => {
+const load = dir => {
     readdir(dir, (err, files) => {
-        let jsfile = files.filter(f => f.split(".")[1] === "js");
+        if(err) throw err;
+        const jsfiles = files.filter(f => f.endsWith('.js'));
 
-        jsfile.forEach((f, i) => {
+        jsfiles.forEach(f => {
             delete require.cache[require.resolve(`${dir}${f}`)];
 
-            let props = require(`${dir}${f}`);
+            const props = require(`${dir}${f}`);
             console.log(`${f} loaded!`);
             
             bot.commands.set(props.help.name, props);
@@ -36,13 +37,16 @@ bot.on("ready", () => {
 bot.on("message", async message => {
     if (message.author.bot || message.channel.type != "text") return;
 
-    let args = message.content.slice(prefix.length).trim().split(/ +/g);
-    let cmd = args.shift().toLowerCase();
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const cmd = args.shift().toLowerCase();
 
     if (!message.content.startsWith(prefix)) return;
 
-    let commandfile = bot.commands.get(cmd);
-    if (commandfile) commandfile.run(bot, message, args);
+    const commandfile = bot.commands.get(cmd);
+    if (commandfile){
+        if(!message.member) message.member = await message.guild.fetchMember(message);
+        commandfile.run(bot, message, args);
+    }
 });
 
 bot.login(token)

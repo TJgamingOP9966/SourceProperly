@@ -5,7 +5,7 @@ module.exports = {
         name: "botinfo"
     },
     run: async(bot, message, args) => {
-        let embed = new RichEmbed()
+        const embed = new RichEmbed()
             .setDescription("Bot information")
             .setColor("#15f153")
             .setThumbnail(bot.user.displayAvatarURL)

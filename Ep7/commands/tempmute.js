@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const { RichEmbed, Role } = require("discord.js");
 const ms = require("ms");
 
 module.exports = {
@@ -7,30 +7,30 @@ module.exports = {
     },
     run: async (bot, message, args) => {
         let member = message.mentions.members.first() || message.guild.members.get(args[0]);
+        if (!member && message.mentions.users.size) member = await message.guild.fetchMember(message.mentions.users.first());
+        if (!member && /^[0-9]+$/.test(args[0])) member = await message.guild.fetchMember(args[0]).catch(() => null);
         if (!member) return message.reply("Couldn't find that member.").then(m => m.delete(5000));
         if (member.hasPermission("MANAGE_MESSAGES")) return message.reply("Couldn't mute that person.").then(m => m.delete(5000));
+        if (Role.comparePositions(member.highestRole, message.member.highestRole) >= 0) return message.reply("Couldn't mute that person.").then(m => m.delete(5000));
+        if (Role.comparePositions(member.highestRole, message.guild.me.highestRole) >= 0) return message.reply("Couldn't mute that person.").then(m => m.delete(5000));
 
-        let role = message.guild.roles.find(r => r.name == "muted");
+        let role = message.guild.roles.find(r => r.name === "muted");
 
         if (!role) {
             try {
-                message.guild.createRole({
+                role = await message.guild.createRole({
                     name: "muted",
-                    color: "BLACK",
-                    permissions: []
-                }).then(r => {
-                    message.guild.channels.forEach(chan => {
-                        chan.overwritePermissions(r, {
-                            SEND_MESSAGES: false
-                        });
-                    });
-                });
-            } catch (e) {
+                    color: "BLACK"
+                })
+                await Promise.all(message.guild.channels.map(chan => chan.overwritePermissions(role, {
+                    SEND_MESSAGES: false
+                })))
+            } catch(_) {
                 return message.reply("Couldn't find \"muted\" role, please create it.").then(m => m.delete(5000));
             }
         }
 
-        let time = args[1] || "30m";
+        const time = args[1] || "30m";
 
         await member.addRole(role);
         message.reply(`${member} has been muted for ${ms(time)}`);
@@ -39,7 +39,7 @@ module.exports = {
             member.removeRole(role);
         }, ms(time));
 
-        let embed = new RichEmbed()
+        const embed = new RichEmbed()
             .setDescription("Mute")
             .setColor("#e56b00")
             .addField("Muted member", `${member} with ID ${member.id}`)
@@ -47,7 +47,7 @@ module.exports = {
             .addField("Time", args[0])
             .setTimestamp()
 
-        let channel = message.guild.channels.find(c => c.name == "logs");
+        const channel = message.guild.channels.find(c => c.name === "logs");
         if (!channel) return message.reply("Couldn't find reports channel").then(m => m.delete(5000));
         return channel.send(embed);
     }

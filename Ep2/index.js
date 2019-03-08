@@ -15,24 +15,26 @@ bot.on("ready", () => {
 bot.on("message", async message => {
     if (message.author.bot || message.channel.type != "text") return;
 
-    let args = message.content.slice(prefix.length).trim().split(/ +/g);
-    let cmd = args.shift().toLowerCase();
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const cmd = args.shift().toLowerCase();
 
-    if (cmd == `serverinfo`) {
-        let embed = new RichEmbed()
+    if(!message.member) message.member = await message.guild.fetchMember(message);
+
+    if (cmd === "serverinfo") {
+        const embed = new RichEmbed()
             .setDescription("Server information")
             .setColor("#15f153")
             .setThumbnail(message.guild.iconURL)
             .addField("Server name", message.guild.name)
-            .addField("Created on", message.guild.createdAt())
+            .addField("Created on", message.guild.createdAt.toLocaleString())
             .addField("You joined", message.member.joinedAt.toLocaleString())
-            .addField("Total members", message.guild.members.size);
+            .addField("Total members", message.guild.memberCount);
 
         return message.channel.send(embed);
     }
 
-    if (cmd == `botinfo`) { 
-        let embed = new RichEmbed()
+    if (cmd === "botinfo") { 
+        const embed = new RichEmbed()
             .setDescription("Bot information")
             .setColor("#15f153")
             .setThumbnail(bot.user.displayAvatarURL)
@@ -43,4 +45,4 @@ bot.on("message", async message => {
     }
 });
 
-bot.login(token)
+bot.login(token);

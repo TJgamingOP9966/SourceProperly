@@ -6,13 +6,14 @@ module.exports = {
     },
     run: async (bot, message, args) => {
         let member = message.mentions.members.first();
+        if (!member && message.mentions.users.size) member = await message.guild.fetchMember(message.mentions.users.first());
         if (!member) return message.reply("You didn't mention someone.").then(m => m.delete(5000));
-        if (!message.member.hasPermission("BAN_MEMBERS") || !member.bannable) return message.reply("Sorry, you don't have permissions").then(m => m.delete(5000));
-        if (member == message.member) return message.reply("You can't ban yourself.").then(m => m.delete(5000));
+        if (!member.bannable) return message.reply("Sorry, you don't have permissions").then(m => m.delete(5000));
+        if (member.id === message.author.id) return message.reply("You can't ban yourself.").then(m => m.delete(5000));
 
-        let reason = args.slice(1).join(" ") || "None";
+        const reason = args.slice(1).join(" ") || "None";
 
-        let embed = new RichEmbed()
+        const embed = new RichEmbed()
             .setDescription("Ban")
             .setColor("#e56b00")
             .addField("Banned member", `${member} with ID ${member.id}`)
@@ -20,7 +21,7 @@ module.exports = {
             .addField("Reason", reason)
             .setTimestamp()
 
-        let channel = message.guild.channels.find(c => c.name == "logs");
+        const channel = message.guild.channels.find(c => c.name === "logs");
         if (!channel) return message.reply("Couldn't find \"logs\" channel").then(m => m.delete(5000));
         
         channel.send(embed);
