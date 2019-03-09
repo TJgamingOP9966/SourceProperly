@@ -15,17 +15,19 @@ bot.on("ready", () => {
 bot.on("message", async message => {
     if (message.author.bot || message.channel.type != "text") return;
 
-    let args = message.content.slice(prefix.length).trim().split(/ +/g);
-    let cmd = args.shift().toLowerCase();
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const cmd = args.shift().toLowerCase();
 
-    if (cmd == `report`) {
+    if (cmd === "report") {
         let member = message.mentions.members.first();
-        if (!member) return message.reply("You didn't mention someone.").then(m => m.delete(5000));
-        if (member == message.member) return message.reply("You can't report yourself.").then(m => m.delete(5000));
+        if (!member && message.mentions.users.size) member = await message.guild.fetchMember(message.mentions.users.first());
+        if(!member) return message.reply("You didn't mention someone.").then(m => m.delete(5000));
+        
+        if (member.id === message.author.id) return message.reply("You can't report yourself.").then(m => m.delete(5000));
 
-        let reason = args.slice(1).join(" ") || "None";
+        const reason = args.slice(1).join(" ") || "None";
 
-        let embed = new RichEmbed()
+        const embed = new RichEmbed()
             .setDescription("Report")
             .setColor("#FF0000")
             .addField("Reported user", `${member} with ID: ${member.id}`)
@@ -33,28 +35,28 @@ bot.on("message", async message => {
             .addField("Reason", reason)
             .setTimestamp()
 
-        let channel = message.guild.channels.find(c => c.name == "reports");
+        const channel = message.guild.channels.find(c => c.name === "reports");
         if (!channel) return message.reply("Couldn't find reports channel").then(m => m.delete(5000));
 
         channel.send(embed);
         message.delete();
     }
 
-    if (cmd == `serverinfo`) {
-        let embed = new RichEmbed()
+    if (cmd === "serverinfo") {
+        const embed = new RichEmbed()
             .setDescription("Server information")
             .setColor("#15f153")
             .setThumbnail(message.guild.iconURL)
             .addField("Server name", message.guild.name)
-            .addField("Created on", message.guild.createdAt())
+            .addField("Created on", message.guild.createdAt.toLocaleString())
             .addField("You joined", message.member.joinedAt.toLocaleString())
-            .addField("Total members", message.guild.members.size);
+            .addField("Total members", message.guild.memberCount);
 
         return message.channel.send(embed);
     }
 
-    if (cmd == `botinfo`) { 
-        let embed = new RichEmbed()
+    if (cmd === "botinfo") { 
+        const embed = new RichEmbed()
             .setDescription("Bot information")
             .setColor("#15f153")
             .setThumbnail(bot.user.displayAvatarURL)
