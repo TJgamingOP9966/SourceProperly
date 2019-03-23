@@ -1,5 +1,3 @@
-const { Role } = require('discord.js');
-
 module.exports = {
     help: {
         name: "addrole"
@@ -15,15 +13,15 @@ module.exports = {
         if (Role.comparePositions(role, message.member.highestRole) >= 0) return message.reply("You don't have the specified permissions to do this!").then(m => m.delete(5000));
         if (Role.comparePositions(role, message.guild.me.highestRole) >= 0) return message.reply("I don't have the specified permissions to do this!").then(m => m.delete(5000));
 
-        if (!member.roles.has(role.id)) {
-            member.addRole(role);
+        if (member.roles.has(role.id)) {
+            member.removeRole(role);
             try {
-                member.send(`Congrats, you have been given the \`${role.name}\` role!`);
+                member.send(`Your \`${role.name}\` role has been removed.`);
             } catch (e) {
-                message.channel.send(`Congrats to ${member}, you have been given the \`${role.name}\` role!`);
+                message.channel.send(`${member}, your \`${role.name}\` role has been removed.`);
             }
         } else {
-            message.reply(`That member already has role: \`${role.name}\``).then(m => m.delete(5000));
+            message.reply(`That member doesn't have role: \`${role.name}\``).then(m => m.delete(5000));
         }
     }
 }
