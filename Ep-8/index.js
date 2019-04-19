@@ -5,6 +5,8 @@ const { readdir } = require("fs");
 const bot = new Client({
     disableEveryone: true
 });
+const storage = require('./storage.js');
+bot.warns = storage(`${__dirname}/warnings.json`);
 
 bot.commands = new Collection();
 bot.aliases = new Collection();

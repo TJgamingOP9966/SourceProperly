@@ -1,10 +1,5 @@
-const {
-    RichEmbed
-} = require("discord.js");
-const fs = require("fs");
+const { RichEmbed } = require("discord.js");
 const warns = require('./warnings.json');
-// Note! You shouldn't store changing data in a JSON!
-// Save in a database to prevent possible data corruption.
 
 module.exports = {
     help: {
@@ -19,15 +14,16 @@ module.exports = {
 
         const reason = args.slice(1).join(" ") || "None";
 
-        if (!warns[member.id]) warns[member.id] = {
-            warns: 0
+        if (!bot.warns[member.id]) {
+            bot.warns[member.id] = 0;
         }
-        warns[member.id].warns++;
-
-        fs.writeFile("./warnings.json", JSON.stringify(warns), err => {
-            if (err) console.log(err);
+         bot.warns[member.id]++;
+        
+        // Error handler
+        bot.warns = storage(`${__dirname}/warnings.json`, err => { 
+            console.error('Whoops! An error occured while trying to save warnings.json\n', err);
         });
-
+        
         const embed = new RichEmbed()
             .setDescription("Warn")
             .setColor("#e56b00")
