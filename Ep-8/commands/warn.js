@@ -1,5 +1,4 @@
 const { RichEmbed } = require("discord.js");
-const warns = require('./warnings.json');
 
 module.exports = {
     help: {
@@ -29,7 +28,7 @@ module.exports = {
             .setColor("#e56b00")
             .addField("Warned member", `${member} with ID: ${member.id}`)
             .addField("Warned by", `${message.author} with ID: ${message.author.id}`)
-            .addField("Warning count", warns[member.id].warns)
+            .addField("Warning count", bot.warns[member.id])
             .addField("Reason", reason)
             .setTimestamp();
 
@@ -38,7 +37,7 @@ module.exports = {
 
         channel.send(embed);
 
-        if(warns[member.id] === 3) {
+        if(bot.warns[member.id] === 3) {
             const role = message.guild.roles.find(r => r.name === "Muted");
             if(!role) return message.reply("Create a muted role to use this feature.");
 
@@ -52,7 +51,7 @@ module.exports = {
                 message.reply(`${member} was automatically unmuted`);
             }, time);
         }
-        else if(warns[member.id] === 5){
+        else if(bot.warns[member.id] === 5){
             member.ban(reason);
             message.reply(`${member} was permanently banned | 5 warnings reached`);
         }

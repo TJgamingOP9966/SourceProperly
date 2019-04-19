@@ -1,26 +1,21 @@
-const { writeFile } = require('fs');
+const { RichEmbed } = require("discord.js");
 
 module.exports = {
     help: { 
         name: "prefix"
     },
     run: async (bot, message, args) => {
-        
-        const prefixes = require('./prefixes.json');
-        // Note! You shouldn't store changing data in a JSON!
-        // Save in a database to prevent possible data corruption.
-
 
         if(!message.member.hasPermission("MANAGE_SERVER")) message.reply("Sorry, you don't have permissions");
-        if(!args[0]) return message.reply(`Usage: ${prefixes[message.guild.id].prefixes}prefix <new prefix>`);
+        if(!args[0]) return message.reply(`Usage: ${bot.prefixes[message.guild.id]}prefix <new prefix>`);
 
-        prefixes[message.guild.id] = {
-            prefixes: args[0]
+        if (!bot.prefixes[message.guild.id]) {
+            bot.warns[message.guild.id] = args[0];
         }
 
-        writeFile("./prefixes.json", JSON.stringify(prefixes), err => {
-            if(err) console.log(err);
-        })
+        bot.prefixes = storage(`${__dirname}/prefixes.json`, err => { 
+            console.error('Whoops! An error occured while trying to save prefixes.json\n', err);
+        });
 
         const embed = new RichEmbed()
         .setTitle("Prefix Set!")

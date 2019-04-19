@@ -1,10 +1,13 @@
-const { token, prefix } = require("./config.json");
+const { prefix, token } = require("./config.json");
 const { Client, Collection } = require("discord.js");
 const { readdir } = require("fs");
 
 const bot = new Client({
     disableEveryone: true
 });
+const storage = require('./storage.js');
+bot.warns = storage(`${__dirname}/warnings.json`);
+bot.prefixes = storage(`${__dirname}/prefixes.json`);
 
 bot.commands = new Collection();
 bot.aliases = new Collection();
@@ -38,25 +41,10 @@ bot.on("ready", () => {
 bot.on("message", async message => {
     if (message.author.bot || message.channel.type != "text") return;
 
-    // Note! You shouldn't store changing data in a JSON!
-    // Save in a database to prevent possible data corruption.
-
-    const prefixes = require('./prefixes.json');
-    if(!prefixes[message.guild.id]) {
-        prefixes[message.guild.id] = {
-            prefixes: prefix
-        }
-    }
-    const updatedPrefix = prefixes[message.guild.id].prefixes;
-
-
-    const args = message.content.slice(updatedPrefix.length).trim().split(/ +/g);
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift().toLowerCase();
 
-    if (!message.content.startsWith(updatedPrefix)) return;
-
-    
-    
+    if (!message.content.startsWith(prefix)) return;
 
     const commandfile = bot.commands.get(cmd);
     if (commandfile){
