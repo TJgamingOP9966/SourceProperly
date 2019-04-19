@@ -1,5 +1,4 @@
 const { RichEmbed } = require("discord.js");
-const { writeFile } = require('fs');
 const warns = require('./warnings.json');
 
 module.exports = {
