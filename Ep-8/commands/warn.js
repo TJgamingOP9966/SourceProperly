@@ -1,16 +1,12 @@
 const { RichEmbed } = require("discord.js");
 const { writeFile } = require('fs');
 const warns = require('./warnings.json');
-const storage = require('./storage.js');
-// Note! You shouldn't store changing data in a JSON!
-// Save in a database to prevent possible data corruption.
 
 module.exports = {
     help: {
         name: "warn"
     },
     run: async (bot, message, args) => {
-        bot.warns = storage(`${__dirname}/warnings.json`);
 
         const member = message.mentions.members.first();
         if (!member && message.mentions.users.size) member = await message.guild.fetchMember(message.mentions.users.first());
