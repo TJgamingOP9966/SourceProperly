@@ -10,7 +10,7 @@ module.exports = {
         if (!member && message.mentions.users.size) member = await message.guild.fetchMember(message.mentions.users.first());
         if (!member) member = message.member;
 
-        if(!bot.warns[member.id] {
+        if(!bot.warns[member.id]) {
             bot.warns[member.id] = 0; 
         }
            

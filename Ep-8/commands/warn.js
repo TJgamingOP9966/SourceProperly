@@ -38,7 +38,7 @@ module.exports = {
 
         channel.send(embed);
 
-        if(!warns[member.id].warns === 3) {
+        if(warns[member.id] === 3) {
             const role = message.guild.roles.find(r => r.name === "Muted");
             if(!role) return message.reply("Create a muted role to use this feature.");
 
@@ -52,7 +52,7 @@ module.exports = {
                 message.reply(`${member} was automatically unmuted`);
             }, time);
         }
-        else if(warns[member.id].warns === 5){
+        else if(warns[member.id] === 5){
             member.ban(reason);
             message.reply(`${member} was permanently banned | 5 warnings reached`);
         }
