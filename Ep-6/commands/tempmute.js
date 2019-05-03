@@ -44,7 +44,7 @@ module.exports = {
             .setColor("#e56b00")
             .addField("Muted member", `${member} with ID ${member.id}`)
             .addField("Muted by", `${message.author} with ID ${message.author.id}`)
-            .addField("Time", args[0])
+            .addField("Time", args[1])
             .setTimestamp()
 
         const channel = message.guild.channels.find(c => c.name === "logs");
